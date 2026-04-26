@@ -75,15 +75,18 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isActive = index == currentIndex;
+
     return GestureDetector(
-      onTap: () => onTap(index),
+      onTap: () => onTap(index), // 🔥 semua dikirim ke parent
       behavior: HitTestBehavior.opaque,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Icon(
           icon,
           size: 26,
-          color: isActive ? AppColors.goldLight : const Color(0xFF666666),
+          color: isActive
+              ? AppColors.goldLight
+              : const Color(0xFF666666),
         ),
       ),
     );

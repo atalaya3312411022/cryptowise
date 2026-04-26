@@ -16,13 +16,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
 
   final List<_OnboardingData> _pages = [
-    _OnboardingData(
-      isFirstPage: true,
+    const _OnboardingData(
+      image: 'assets/images/logo.png',
       title: 'INVEST IN\nCRYPTOCURRENCY',
       subtitle: 'Learn Crypto\nthe Smart Way.',
     ),
-    _OnboardingData(
-      isFirstPage: false,
+    const _OnboardingData(
+      image: 'assets/images/wallet.png',
       title: 'SAVING IN\nCRYPTOCURRENCY',
       subtitle: 'Save Smart\nGrow with Crypto',
     ),
@@ -110,12 +110,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class _OnboardingData {
-  final bool isFirstPage;
+  final String image;
   final String title;
   final String subtitle;
 
   const _OnboardingData({
-    required this.isFirstPage,
+    required this.image,
     required this.title,
     required this.subtitle,
   });
@@ -138,10 +138,12 @@ class _OnboardingPage extends StatelessWidget {
           const SizedBox(height: 80),
 
           // Icon / Logo area
-          if (data.isFirstPage)
-            _CryptoIconLarge()
-          else
-            _WalletIconLarge(),
+          Image.asset(
+            data.image,
+            width: data.image.contains('wallet') ? 200 : 200,
+            height: data.image.contains('wallet') ? 180 : 200,
+            fit: BoxFit.contain,
+          ),
 
           const SizedBox(height: 48),
 

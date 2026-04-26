@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const NewsScreen(userName: 'Alyssa'),
+        builder: (_) => const NewsScreen(key: ValueKey('news')),
       ),
     );
   }
@@ -51,7 +51,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 60),
 
               // Logo
-              const CryptoLogo(size: 80),
+              Image.asset(
+                'assets/images/logo.png',
+                width: 160,
+              ),
+
               const SizedBox(height: 24),
 
               // Title

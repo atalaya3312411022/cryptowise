@@ -1,127 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../models/news_model.dart';
-import '../theme/app_theme.dart';
-import '../widgets/bottom_nav.dart';
-import '../widgets/news_image.dart';
+import 'webview_screen.dart';
 
 class NewsStoryScreen extends StatelessWidget {
-  final NewsArticle article;
-  final int navIndex;
-  final Function(int) onNavTap;
+  final Map article;
 
-  const NewsStoryScreen({
-    super.key,
-    required this.article,
-    required this.navIndex,
-    required this.onNavTap,
-  });
+  const NewsStoryScreen({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {
+    final title = article['title'] ?? '';
+    final desc = article['description'] ?? '';
+    final image = article['image'];
+    final source = article['source']['name'] ?? '';
+    final url = article['url'];
+
+    // 🔥 BIKIN "FAKE DETAIL" BIAR PANJANG
+    final content = desc + "\n\n" + desc + "\n\n" + desc;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Column(
-        children: [
-          Expanded(
-            child: CustomScrollView(
-              slivers: [
-                // Status bar spacer
-                SliverToBoxAdapter(
-                  child: SafeArea(
-                    bottom: false,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: const Icon(
-                              Icons.chevron_left,
-                              color: AppColors.goldLight,
-                              size: 28,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'News',
-                            style: GoogleFonts.playfairDisplay(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ],
-                      ),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text("News Detail"),
+        backgroundColor: Colors.black,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// IMAGE
+            if (image != null)
+              Image.network(
+                image,
+                width: double.infinity,
+                height: 250,
+                fit: BoxFit.cover,
+              ),
+
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// TITLE
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
 
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 8),
+                  const SizedBox(height: 10),
 
-                        // Hero image
-                        NewsImagePlaceholder(
-                          type: article.imagePlaceholder,
-                          height: 210,
-                          showDuration: article.videoDuration != null,
-                          duration: article.videoDuration,
-                        ),
+                  /// SOURCE
+                  Text(
+                    source,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
 
-                        const SizedBox(height: 14),
+                  const SizedBox(height: 20),
 
-                        // Author + time
-                        Text(
-                          '${article.author} · ${article.timeAgo}',
-                          style: AppTextStyles.bodyGrey.copyWith(fontSize: 12),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Article sections
-                        ...article.sections.map((section) => Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    section.heading,
-                                    style: GoogleFonts.playfairDisplay(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    section.body,
-                                    style: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      color: const Color(0xFFCCCCCC),
-                                      height: 1.7,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )),
-
-                        const SizedBox(height: 20),
-                      ],
+                  /// ISI (DIBUAT PANJANG)
+                  Text(
+                    content,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      height: 1.6,
                     ),
                   ),
-                ),
-              ],
+
+                  const SizedBox(height: 30),
+
+                  /// 🔥 BUTTON KE FULL ARTIKEL / VIDEO
+                  if (url != null)
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => WebViewScreen(
+                              url: url,
+                              title: "Full Article",
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text("Baca / Tonton Selengkapnya"),
+                    ),
+                ],
+              ),
             ),
-          ),
-
-          // Bottom nav
-          AppBottomNav(currentIndex: navIndex, onTap: onNavTap),
-        ],
+          ],
+        ),
       ),
     );
   }
