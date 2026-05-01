@@ -44,16 +44,17 @@ flutter build apk --release
 - ✅ Login Screen
 - ✅ Daftar Akun (Register)
 - ✅ Daftar Akun Success (banner hijau)
+- ✅ Dashboard utama
+- ✅ News / News Story
+- ✅ News / Article
+- ✅ Trade / Holdings
+- ✅ Trade Chart
 
 ## Screen berikutnya (perlu screenshot dari Figma)
-- Dashboard utama
-- News / News Story
 - Search
 - Profile & Edit Profile
 - Payment Method
-- Trade / Holdings
 - Contact Support
-- Trade Allocation
 
 ## Color Palette
 | Nama | Hex |
