@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "644497889566",
+    "project_id": "cryptowise-72c0a",
+    "storage_bucket": "cryptowise-72c0a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644497889566:android:a90e590c58e6f23e62510f",
+        "android_client_info": {
+          "package_name": "com.example.cryptowise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrQI-ifVW0NKbqtdjWgLHZ5QtsSZ_MKjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

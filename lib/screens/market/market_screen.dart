@@ -18,81 +18,116 @@ class _MarketScreenState extends State<MarketScreen> {
 
   String selectedCoin = "bitcoin";
 
+  Timer? timer;
+
   @override
   void initState() {
     super.initState();
-    fetchAll();
 
-    Timer.periodic(const Duration(seconds: 20), (_) {
-      fetchAll();
+    fetchAll(); // 🔥 first load
+
+    timer = Timer.periodic(const Duration(seconds: 20), (_) {
+      if (!mounted) return;
+      fetchCoins(); // 🔥 update market aja (biar gak rusak UI)
     });
   }
 
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
   Future<void> fetchAll() async {
-    await Future.wait([
-      fetchCoins(),
-      fetchChart(selectedCoin),
-    ]);
+    await fetchCoins();
+    await fetchChart(selectedCoin);
+
+    if (!mounted) return;
 
     setState(() {
       isLoading = false;
     });
   }
 
-  /// 🔥 MARKET LIST
+  /// 🔥 FETCH MARKET
   Future<void> fetchCoins() async {
-    final response = await http.get(
-      Uri.parse(
-        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1',
-      ),
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(
+          'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1',
+        ),
+      );
 
-    coins = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        if (!mounted) return;
+
+        setState(() {
+          coins = data;
+        });
+      }
+    } catch (e) {
+      debugPrint("ERROR COINS: $e");
+    }
   }
 
-  /// 🔥 CHART FIXED (INI YANG PALING PENTING)
+  /// 🔥 FETCH CHART
   Future<void> fetchChart(String coinId) async {
-    final response = await http.get(
-      Uri.parse(
-        'https://api.coingecko.com/api/v3/coins/$coinId/market_chart?vs_currency=usd&days=7',
-      ),
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(
+          'https://api.coingecko.com/api/v3/coins/$coinId/market_chart?vs_currency=usd&days=7',
+        ),
+      );
 
-    final data = json.decode(response.body);
-    final prices = data['prices'];
+      if (response.statusCode != 200) return;
 
-    /// 🔥 FILTER BIAR GAK PADAT
-    final filtered = prices.where((e) {
-      return prices.indexOf(e) % 4 == 0;
-    }).toList();
+      final data = json.decode(response.body);
+      final prices = data['prices'];
 
-    double x = 0;
+      if (prices == null) return;
 
-    chartData = filtered.map<FlSpot>((point) {
-      x++;
-      return FlSpot(x, point[1].toDouble());
-    }).toList();
+      double x = 0;
+
+      final newChart = prices.map<FlSpot>((point) {
+        x += 1;
+
+        return FlSpot(
+          x.toDouble(),
+          (point[1] as num).toDouble(), // 🔥 FIX int/double
+        );
+      }).toList();
+
+      if (!mounted) return;
+
+      setState(() {
+        chartData = newChart;
+      });
+    } catch (e) {
+      debugPrint("ERROR CHART: $e");
+    }
   }
 
   /// 🔥 SELECT COIN
   void selectCoin(String coinId) async {
     setState(() {
-      isLoading = true;
       selectedCoin = coinId;
     });
 
     await fetchChart(coinId);
-
-    setState(() {
-      isLoading = false;
-    });
   }
 
+  /// 🔥 TOTAL BALANCE
   double get totalBalance {
     if (coins.isEmpty) return 0;
-    return coins.take(5).fold(0.0, (sum, coin) {
-      return sum + (coin['current_price'] * 0.1);
-    });
+
+    final coin = coins.firstWhere(
+      (c) => c['id'] == selectedCoin,
+      orElse: () => coins[0],
+    );
+
+    return (coin['current_price'] ?? 0).toDouble();
   }
 
   double get minY => chartData.isEmpty
@@ -105,129 +140,152 @@ class _MarketScreenState extends State<MarketScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
+    return SafeArea(
+      child: Container(
+        color: Colors.black,
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
 
-                /// 🔥 HEADER
-                Text(
-                  "\$${totalBalance.toStringAsFixed(2)}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                /// 🔥 CHART FINAL (SUDAH MIRIP FIGMA)
-                SizedBox(
-                  height: 200,
-                  child: LineChart(
-                    LineChartData(
-                      minY: minY,
-                      maxY: maxY,
-                      titlesData: FlTitlesData(show: false),
-                      gridData: FlGridData(show: false),
-                      borderData: FlBorderData(show: false),
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: chartData,
-                          isCurved: true,
-                          curveSmoothness: 0.35,
-                          barWidth: 3,
-                          dotData: FlDotData(show: false),
-
-                          /// 🔥 WARNA GRADIENT
-                          gradient: const LinearGradient(
-                            colors: [
-                              Colors.greenAccent,
-                              Colors.green,
-                            ],
-                          ),
-
-                          /// 🔥 AREA (INI YANG BIKIN KAYAK FIGMA)
-                          belowBarData: BarAreaData(
-                            show: true,
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.green.withOpacity(0.3),
-                                Colors.transparent,
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                          ),
+                  /// 🔥 BALANCE
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "All Portfolios",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                /// 🔥 LIST COIN
-                ...coins.take(10).map((coin) {
-                  final price = coin['current_price'] ?? 0;
-                  final change =
-                      coin['price_change_percentage_24h'] ?? 0;
-                  final id = coin['id'];
-
-                  final isSelected = id == selectedCoin;
-
-                  return GestureDetector(
-                    onTap: () => selectCoin(id),
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? Colors.green.withOpacity(0.2)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: ListTile(
-                        leading: Image.network(
-                          coin['image'],
-                          width: 35,
+
+                      const SizedBox(height: 6),
+
+                      Text(
+                        "\$${totalBalance.toStringAsFixed(2)}",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
                         ),
-                        title: Text(
-                          coin['name'],
-                          style: const TextStyle(color: Colors.white),
+                      ),
+
+                      const SizedBox(height: 4),
+
+                      const Text(
+                        "+1.2% (24h)",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 14,
                         ),
-                        subtitle: Text(
-                          coin['symbol'].toUpperCase(),
-                          style:
-                              const TextStyle(color: Colors.grey),
-                        ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "\$${price.toStringAsFixed(2)}",
-                              style: const TextStyle(
-                                  color: Colors.white),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  const SizedBox(height: 20),
+
+                  /// 🔥 CHART
+                  SizedBox(
+                    height: 200,
+                    child: LineChart(
+                      LineChartData(
+                        minY: minY,
+                        maxY: maxY,
+                        titlesData: FlTitlesData(show: false),
+                        gridData: FlGridData(show: false),
+                        borderData: FlBorderData(show: false),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: chartData,
+                            isCurved: true,
+                            barWidth: 3,
+                            dotData: FlDotData(show: false),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Colors.greenAccent,
+                                Colors.green,
+                              ],
                             ),
-                            Text(
-                              "${change.toStringAsFixed(2)}%",
-                              style: TextStyle(
-                                color: change >= 0
-                                    ? Colors.green
-                                    : Colors.red,
+                            belowBarData: BarAreaData(
+                              show: true,
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.green.withValues(alpha: 0.3),
+                                  Colors.transparent,
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                }).toList(),
-              ],
-            ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  /// 🔥 LIST COIN
+                  ...coins.take(10).map((coin) {
+                    final price = (coin['current_price'] ?? 0).toDouble();
+                    final change =
+                        (coin['price_change_percentage_24h'] ?? 0).toDouble();
+                    final id = coin['id'];
+
+                    final isSelected = id == selectedCoin;
+
+                    return GestureDetector(
+                      onTap: () => selectCoin(id),
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? Colors.green.withValues(alpha: 0.2)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListTile(
+                          leading: Image.network(
+                            coin['image'],
+                            width: 35,
+                          ),
+                          title: Text(
+                            coin['name'],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            coin['symbol'].toUpperCase(),
+                            style:
+                                const TextStyle(color: Colors.grey),
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "\$${price.toStringAsFixed(2)}",
+                                style: const TextStyle(
+                                    color: Colors.white),
+                              ),
+                              Text(
+                                "${change.toStringAsFixed(2)}%",
+                                style: TextStyle(
+                                  color: change >= 0
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
+      )
     );
   }
 }

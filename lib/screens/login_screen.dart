@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../widgets/common_widgets.dart';
 import 'register_screen.dart';
 import 'news_screen.dart';
+import 'package:cryptowise/main_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -83,7 +84,14 @@ class _LoginScreenState extends State<LoginScreen> {
               // Login button
               GoldButton(
                 text: 'Login',
-                onPressed: _handleLogin,
+                onPressed: () async {
+                  // Simulate a delay for login process
+                  await Future.delayed(const Duration(seconds: 2));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const MainPage()),
+                  );
+                },
               ),
               const SizedBox(height: 20),
 

@@ -3,6 +3,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../theme/app_theme.dart';
 import '../widgets/common_widgets.dart';
 import 'login_screen.dart';
+import '../main_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -85,7 +86,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => const LoginScreen()),
+                      builder: (_) => const LoginScreen(),
+                    ),
                   );
                 }
               },
@@ -243,7 +245,7 @@ class _LargeCLogoPainter extends CustomPainter {
 class _WalletIconLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 130,
       height: 100,
       child: CustomPaint(painter: _WalletPainter()),

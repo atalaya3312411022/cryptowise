@@ -169,11 +169,6 @@ class _NewsScreenState extends State<NewsScreen> {
       /// 🔥 BODY SWITCH
       body: _buildBody(),
 
-      /// 🔥 NAVBAR KAMU
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: _navIndex,
-        onTap: _onNavTap,
-      ),
     );
   }
 }
