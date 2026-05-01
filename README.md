@@ -37,6 +37,8 @@ flutter build apk --release
 ## Dependencies
 - `smooth_page_indicator` - Untuk dot indicator di onboarding
 - `google_fonts` - Font Playfair Display & Lato
+- `fl_chart` - Untuk Menampilkan Chart Real-Time
+- `webview_flutter` - Untuk Menampilkan Artikel 
 
 ## Screen yang sudah dibuat
 - ✅ Onboarding Db1 (Invest in Cryptocurrency)
