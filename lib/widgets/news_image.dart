@@ -22,7 +22,7 @@ class NewsImagePlaceholder extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: Stack(
         children: [
-          Container(
+          SizedBox(
             width: width ?? double.infinity,
             height: height,
             child: CustomPaint(
@@ -41,7 +41,7 @@ class NewsImagePlaceholder extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.75),
+                  color: Colors.black.withValues(alpha: 0.75),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -219,7 +219,7 @@ class _BitcoinImagePainter extends CustomPainter {
     // Glow effect circles
     for (int i = 4; i >= 1; i--) {
       final glowPaint = Paint()
-        ..color = const Color(0xFFB8860B).withOpacity(0.06 * i)
+        ..color = const Color(0xFFB8860B).withValues(alpha: 0.06 * i)
         ..style = PaintingStyle.fill;
       canvas.drawCircle(
         Offset(size.width * 0.5, size.height * 0.55),
