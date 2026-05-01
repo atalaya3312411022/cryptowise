@@ -156,7 +156,13 @@ class _NewsScreenState extends State<NewsScreen> {
       backgroundColor: Colors.black,
 
       appBar: AppBar(
-        title: const Text('Crypto News'),
+        title: Text(
+          _navIndex == 0
+              ? "Crypto News"
+              : _navIndex == 2
+                  ? "Crypto Market"
+                  : "",
+        ),
         backgroundColor: Colors.black,
       ),
 

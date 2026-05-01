@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
-/// Renders a stylized placeholder image since we can't load real network images.
-/// Each type has a distinct look matching the Figma design.
 class NewsImagePlaceholder extends StatelessWidget {
   final String type; // 'forex' or 'bitcoin'
   final double height;
