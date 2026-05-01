@@ -1,6 +1,6 @@
 # CryptoWise Flutter App
 
-Aplikasi mobile cryptocurrency investment dengan tema dark gold.
+Aplikasi Mobile edukasi aset kripto berbasis gamifikasi dan simulasi trading real-time yang interaktif dan aman dengan tema dark gold.
 
 ## Struktur Project
 
