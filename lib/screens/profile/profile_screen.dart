@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../widgets/bottom_nav.dart';
 import 'edit_profile_screen.dart';
+import 'payment_method_screen.dart';
+import 'account_settings_screen.dart';
+import '../login_screen.dart'; // ← TAMBAH INI
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,17 +12,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int navIndex = 3;
-
-  void onNavTap(int index) {
-    setState(() => navIndex = index);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-
       body: Column(
         children: [
           Expanded(
@@ -34,7 +29,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 30),
                     CircleAvatar(
                       radius: 45,
-                      backgroundImage: AssetImage('assets/images/profile.png'),
+                      backgroundImage:
+                          const AssetImage('assets/images/profile.png'),
+                      backgroundColor: Colors.grey[900],
                     ),
                     const SizedBox(height: 12),
                     const Text(
@@ -49,7 +46,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       "alyssa@gmail.com",
                       style: TextStyle(color: Colors.grey),
                     ),
-
                     TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -75,15 +71,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.orange.withValues(alpha: 0.3),
+                        Colors.orange.withOpacity(0.3),
                         Colors.black,
                       ],
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "Total Asset",
                         style: TextStyle(color: Colors.grey),
@@ -108,23 +104,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 20),
 
                 /// 🔥 MENU
-                _menuItem(Icons.settings, "Account Settings"),
-                _menuItem(Icons.credit_card, "Payment Method"),
-                _menuItem(Icons.support_agent, "Contact Support"),
+                _menuItem(
+                  icon: Icons.settings,
+                  title: "Account Settings",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AccountSettingsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                _menuItem(
+                  icon: Icons.credit_card,
+                  title: "Payment Method",
+                  onTap: () {
+                    // ← NAVIGASI KE PAYMENT METHOD
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const PaymentMethodScreen(),
+                      ),
+                    );
+                  },
+                ),
+                _menuItem(
+                  icon: Icons.support_agent,
+                  title: "Contact Support",
+                  onTap: () {
+                    // Tambahkan navigasi ke Contact Support nanti
+                  },
+                ),
 
                 const SizedBox(height: 20),
 
                 /// 🔥 LOGOUT
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(122, 255, 153, 0),
+                    backgroundColor:
+                        const Color.fromARGB(122, 255, 153, 0),
                     minimumSize: const Size(double.infinity, 45),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    // Kembali ke LoginScreen dan hapus semua history navigasi
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const LoginScreen()),
+                      (route) => false,
+                    );
+                  },
                   child: const Text(
                     "Logout",
                     style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -137,22 +171,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _menuItem(IconData icon, String title) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.orange),
-          const SizedBox(width: 12),
-          Text(title, style: const TextStyle(color: Colors.white)),
-          const Spacer(),
-          const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey),
-        ],
+  Widget _menuItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.orange),
+            const SizedBox(width: 12),
+            Text(title, style: const TextStyle(color: Colors.white)),
+            const Spacer(),
+            const Icon(Icons.arrow_forward_ios,
+                size: 14, color: Colors.grey),
+          ],
+        ),
       ),
     );
   }
