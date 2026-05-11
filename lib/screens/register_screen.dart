@@ -56,8 +56,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 48),
 
                   // Logo
-                  const CryptoLogo(size: 70),
-                  const SizedBox(height: 20),
+                  Image.asset(
+                    'assets/images/logo.png',
+                    width: 120,
+                  ),
+
 
                   // Title
                   Text('Daftar Akun', style: AppTextStyles.headline2),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
+import 'coin_detail_screen.dart';
 
 class MarketScreen extends StatefulWidget {
   const MarketScreen({super.key});
@@ -238,7 +239,19 @@ class _MarketScreenState extends State<MarketScreen> {
                     final isSelected = id == selectedCoin;
 
                     return GestureDetector(
-                      onTap: () => selectCoin(id),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => CoinDetailScreen(
+                              coinId: coin['id'],
+                              coinName: coin['name'],
+                              coinImage: coin['image'],
+                            ),
+                          ),
+                        );
+                      },
+
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(

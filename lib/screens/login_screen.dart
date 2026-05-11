@@ -121,17 +121,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 12),
 
-              // Admin login
-              GestureDetector(
-                onTap: _handleAdminLogin,
-                child: Text(
-                  'Login sebagai Admin',
-                  style: AppTextStyles.bodyGrey.copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationColor: AppColors.grey,
-                  ),
-                ),
-              ),
+              // // Admin login
+              // GestureDetector(
+              //   onTap: _handleAdminLogin,
+              //   child: Text(
+              //     'Login sebagai Admin',
+              //     style: AppTextStyles.bodyGrey.copyWith(
+              //       decoration: TextDecoration.underline,
+              //       decorationColor: AppColors.grey,
+              //     ),
+              //   ),
+              // ),
 
               const SizedBox(height: 40),
 
