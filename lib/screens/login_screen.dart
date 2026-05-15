@@ -32,12 +32,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _handleAdminLogin() {
-    // TODO: implement admin login
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Login sebagai Admin')),
-    );
-  }
+  // void _handleAdminLogin() {
+  //   // TODO: implement admin login
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text('Login sebagai Admin')),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

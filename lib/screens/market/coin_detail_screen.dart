@@ -22,6 +22,12 @@ class CoinDetailScreen extends StatefulWidget {
 class _CoinDetailScreenState extends State<CoinDetailScreen> {
   bool isLoading = true;
 
+  final TextEditingController amountController =
+    TextEditingController();
+
+  double virtualBalance = 10000;
+  int xp = 120;
+
   Map coinData = {};
   List<FlSpot> chartData = [];
 
@@ -255,6 +261,268 @@ class _CoinDetailScreenState extends State<CoinDetailScreen> {
                   ),
 
                   const SizedBox(height: 30),
+
+                  /// 🔥 GAMIFICATION TRADING
+                  Container(
+                    padding: const EdgeInsets.all(18),
+
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF121212),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+
+                    child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+
+                      children: [
+
+                        const Text(
+                          "Trading Simulator",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        /// BALANCE
+                        Text(
+                          "Virtual Balance",
+                          style: TextStyle(
+                            color: Colors.grey.shade400,
+                          ),
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        Text(
+                          "\$${virtualBalance.toStringAsFixed(2)}",
+                          style: const TextStyle(
+                            color: Colors.greenAccent,
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        /// XP
+                        Text(
+                          "XP: $xp",
+                          style: const TextStyle(
+                            color: Colors.amber,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        /// INPUT
+                        TextField(
+                          controller: amountController,
+
+                          keyboardType:
+                              TextInputType.number,
+
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+
+                          decoration: InputDecoration(
+                            hintText:
+                                "Enter amount (e.g 0.1)",
+
+                            hintStyle:
+                                const TextStyle(
+                              color: Colors.grey,
+                            ),
+
+                            filled: true,
+                            fillColor:
+                                const Color(0xFF1A1A1A),
+
+                            border:
+                                OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(
+                                      14),
+                              borderSide:
+                                  BorderSide.none,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        /// BUTTONS
+                        Row(
+                          children: [
+
+                            /// BUY
+                            Expanded(
+                              child: ElevatedButton(
+                                style:
+                                    ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Colors.green,
+                                  padding:
+                                      const EdgeInsets
+                                          .symmetric(
+                                    vertical: 16,
+                                  ),
+                                ),
+
+                                onPressed: () {
+
+                                  setState(() {
+                                    xp += 15;
+                                  });
+
+                                  showDialog(
+                                    context: context,
+
+                                    builder: (_) =>
+                                        AlertDialog(
+                                      backgroundColor:
+                                          const Color(
+                                              0xFF1A1A1A),
+
+                                      title:
+                                          const Text(
+                                        "Success",
+                                        style: TextStyle(
+                                          color:
+                                              Colors
+                                                  .white,
+                                        ),
+                                      ),
+
+                                      content:
+                                          Text(
+                                        "Successfully bought ${widget.coinName}\n+15 XP",
+                                        style:
+                                            const TextStyle(
+                                          color: Colors
+                                              .white70,
+                                        ),
+                                      ),
+
+                                      actions: [
+
+                                        TextButton(
+                                          onPressed:
+                                              () {
+                                            Navigator.pop(
+                                                context);
+                                          },
+                                          child:
+                                              const Text(
+                                            "OK",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+
+                                child: const Text(
+                                  "BUY",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight:
+                                        FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(width: 12),
+
+                            /// SELL
+                            Expanded(
+                              child: ElevatedButton(
+                                style:
+                                    ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Colors.red,
+                                  padding:
+                                      const EdgeInsets
+                                          .symmetric(
+                                    vertical: 16,
+                                  ),
+                                ),
+
+                                onPressed: () {
+
+                                  setState(() {
+                                    xp += 10;
+                                  });
+
+                                  showDialog(
+                                    context: context,
+
+                                    builder: (_) =>
+                                        AlertDialog(
+                                      backgroundColor:
+                                          const Color(
+                                              0xFF1A1A1A),
+
+                                      title:
+                                          const Text(
+                                        "Success",
+                                        style: TextStyle(
+                                          color:
+                                              Colors
+                                                  .white,
+                                        ),
+                                      ),
+
+                                      content:
+                                          Text(
+                                        "Successfully sold ${widget.coinName}\n+10 XP",
+                                        style:
+                                            const TextStyle(
+                                          color: Colors
+                                              .white70,
+                                        ),
+                                      ),
+
+                                      actions: [
+
+                                        TextButton(
+                                          onPressed:
+                                              () {
+                                            Navigator.pop(
+                                                context);
+                                          },
+                                          child:
+                                              const Text(
+                                            "OK",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+
+                                child: const Text(
+                                  "SELL",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight:
+                                        FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
 
                   /// 🔥 MARKET INFO
                   Container(

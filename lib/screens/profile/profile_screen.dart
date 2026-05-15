@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'edit_profile_screen.dart';
-import 'payment_method_screen.dart';
+import 'achievement_screen.dart';
 import 'account_settings_screen.dart';
+import 'contact_support_screen.dart';
 import '../login_screen.dart'; // ← TAMBAH INI
 
 class ProfileScreen extends StatefulWidget {
@@ -117,14 +118,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
                 _menuItem(
-                  icon: Icons.credit_card,
-                  title: "Payment Method",
+                  icon: Icons.emoji_events,
+                  title: "Achievements",
                   onTap: () {
-                    // ← NAVIGASI KE PAYMENT METHOD
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const PaymentMethodScreen(),
+                        builder: (_) =>
+                            const AchievementScreen(),
                       ),
                     );
                   },
@@ -133,7 +134,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: Icons.support_agent,
                   title: "Contact Support",
                   onTap: () {
-                    // Tambahkan navigasi ke Contact Support nanti
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            const ContactSupportScreen(),
+                      ),
+                    );
                   },
                 ),
 
