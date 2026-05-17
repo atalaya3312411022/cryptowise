@@ -107,6 +107,14 @@ class AchievementScreen extends StatelessWidget {
           ),
 
           buildAchievement(
+            icon: Icons.play_circle_fill,
+            title: "Learning Enthusiast",
+            subtitle:
+                "Watch 5 educational videos",
+            unlocked: true,
+          ),
+
+          buildAchievement(
             icon: Icons.menu_book,
             title: "News Reader",
             subtitle:
@@ -130,13 +138,6 @@ class AchievementScreen extends StatelessWidget {
             unlocked: false,
           ),
 
-          buildAchievement(
-            icon: Icons.play_circle_fill,
-            title: "Learning Enthusiast",
-            subtitle:
-                "Watch 5 educational videos",
-            unlocked: false,
-          ),
         ],
       ),
     );

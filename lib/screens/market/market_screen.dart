@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
-import 'coin_detail_screen.dart';
+import 'buy_sell_screen.dart';
 
 class MarketScreen extends StatefulWidget {
   const MarketScreen({super.key});
@@ -243,7 +243,7 @@ class _MarketScreenState extends State<MarketScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => CoinDetailScreen(
+                            builder: (_) => BuySellScreen(
                               coinId: coin['id'],
                               coinName: coin['name'],
                               coinImage: coin['image'],

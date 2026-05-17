@@ -51,12 +51,17 @@ flutter build apk --release
 - ✅ News / Article
 - ✅ Trade / Holdings
 - ✅ Trade Chart
+- ✅ Search
+- ✅ Profile & Edit Profile
+- ✅ Achievement
+- ✅ Contact Support
 
-## Screen berikutnya (perlu screenshot dari Figma)
-- Search
+## Backend berikutnya (perlu screenshot dari Figma)
+- Login Screen
+- Daftar Akun (Register)
 - Profile & Edit Profile
-- Payment Method
-- Contact Support
+- 
+- 
 
 ## Color Palette
 | Nama | Hex |

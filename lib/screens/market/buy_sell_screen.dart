@@ -3,12 +3,12 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class CoinDetailScreen extends StatefulWidget {
+class BuySellScreen extends StatefulWidget {
   final String coinId;
   final String coinName;
   final String coinImage;
 
-  const CoinDetailScreen({
+  const BuySellScreen({
     super.key,
     required this.coinId,
     required this.coinName,
@@ -16,10 +16,10 @@ class CoinDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<CoinDetailScreen> createState() => _CoinDetailScreenState();
+  State<BuySellScreen> createState() =>_BuySellScreenState();
 }
 
-class _CoinDetailScreenState extends State<CoinDetailScreen> {
+class _BuySellScreenState extends State<BuySellScreen> {
   bool isLoading = true;
 
   final TextEditingController amountController =
