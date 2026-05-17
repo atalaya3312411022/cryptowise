@@ -60,8 +60,7 @@ flutter build apk --release
 - Login Screen
 - Daftar Akun (Register)
 - Profile & Edit Profile
-- 
-- 
+
 
 ## Color Palette
 | Nama | Hex |
