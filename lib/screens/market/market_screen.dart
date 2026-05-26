@@ -25,11 +25,11 @@ class _MarketScreenState extends State<MarketScreen> {
   void initState() {
     super.initState();
 
-    fetchAll(); // 🔥 first load
+    fetchAll();
 
     timer = Timer.periodic(const Duration(seconds: 20), (_) {
       if (!mounted) return;
-      fetchCoins(); // 🔥 update market aja (biar gak rusak UI)
+      fetchCoins();
     });
   }
 
@@ -50,7 +50,7 @@ class _MarketScreenState extends State<MarketScreen> {
     });
   }
 
-  /// 🔥 FETCH MARKET
+  /// FETCH MARKET
   Future<void> fetchCoins() async {
     try {
       final response = await http.get(
@@ -73,7 +73,7 @@ class _MarketScreenState extends State<MarketScreen> {
     }
   }
 
-  /// 🔥 FETCH CHART
+  /// FETCH CHART
   Future<void> fetchChart(String coinId) async {
     try {
       final response = await http.get(
@@ -96,7 +96,7 @@ class _MarketScreenState extends State<MarketScreen> {
 
         return FlSpot(
           x.toDouble(),
-          (point[1] as num).toDouble(), // 🔥 FIX int/double
+          (point[1] as num).toDouble(),
         );
       }).toList();
 
@@ -110,7 +110,7 @@ class _MarketScreenState extends State<MarketScreen> {
     }
   }
 
-  /// 🔥 SELECT COIN
+  /// SELECT COIN
   void selectCoin(String coinId) async {
     setState(() {
       selectedCoin = coinId;
@@ -119,7 +119,7 @@ class _MarketScreenState extends State<MarketScreen> {
     await fetchChart(coinId);
   }
 
-  /// 🔥 TOTAL BALANCE
+  /// TOTAL BALANCE
   double get totalBalance {
     if (coins.isEmpty) return 0;
 
@@ -150,7 +150,7 @@ class _MarketScreenState extends State<MarketScreen> {
                 padding: const EdgeInsets.all(16),
                 children: [
 
-                  /// 🔥 BALANCE
+                  /// BALANCE
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -190,7 +190,7 @@ class _MarketScreenState extends State<MarketScreen> {
 
                   const SizedBox(height: 20),
 
-                  /// 🔥 CHART
+                  /// CHART
                   SizedBox(
                     height: 200,
                     child: LineChart(
@@ -229,7 +229,7 @@ class _MarketScreenState extends State<MarketScreen> {
 
                   const SizedBox(height: 20),
 
-                  /// 🔥 LIST COIN
+                  /// LIST COIN
                   ...coins.take(10).map((coin) {
                     final price = (coin['current_price'] ?? 0).toDouble();
                     final change =

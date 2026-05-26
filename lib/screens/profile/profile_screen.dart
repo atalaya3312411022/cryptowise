@@ -3,7 +3,8 @@ import 'edit_profile_screen.dart';
 import 'achievement_screen.dart';
 import 'account_settings_screen.dart';
 import 'contact_support_screen.dart';
-import '../login_screen.dart'; // ← TAMBAH INI
+import '../login_screen.dart';
+import '../../data/app_data.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.all(16),
               children: [
 
-                /// 🔥 PROFILE HEADER
+                /// PROFILE HEADER
                 Column(
                   children: [
                     const SizedBox(height: 30),
@@ -66,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 const SizedBox(height: 20),
 
-                /// 🔥 BALANCE CARD
+                /// BALANCE CARD
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -78,23 +79,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Total Asset",
                         style: TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       Text(
-                        "Rp 135.000.000",
-                        style: TextStyle(
+                        "Rp ${(AppData.virtualBalance * 16000).toStringAsFixed(0)}",
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                            fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "+10% This Month",
                         style: TextStyle(color: Colors.green),
                       ),
@@ -104,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 const SizedBox(height: 20),
 
-                /// 🔥 MENU
+                /// MENU
                 _menuItem(
                   icon: Icons.settings,
                   title: "Account Settings",
@@ -146,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 const SizedBox(height: 20),
 
-                /// 🔥 LOGOUT
+                /// LOGOUT
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
