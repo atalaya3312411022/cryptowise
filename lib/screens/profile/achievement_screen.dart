@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../data/app_data.dart';
 
 class AchievementScreen extends StatelessWidget {
   const AchievementScreen({super.key});
@@ -17,128 +18,183 @@ class AchievementScreen extends StatelessWidget {
         ),
       ),
 
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      body: ListView.builder(
+        padding:
+            const EdgeInsets.all(16),
 
-        children: [
+        itemCount:
+            AppData
+                .achievements
+                .length +
 
-          /// LEVEL
-          Container(
-            padding: const EdgeInsets.all(18),
+                1,
 
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
+        itemBuilder:
+            (context, index) {
 
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFFB8860B),
-                  Color(0xFF6A3E00),
+          /// 🔥 LEVEL CARD
+          if (index == 0) {
+            return Container(
+              margin:
+                  const EdgeInsets.only(
+                      bottom: 20),
+
+              padding:
+                  const EdgeInsets.all(
+                      18),
+
+              decoration:
+                  BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(
+                        18),
+
+                gradient:
+                    const LinearGradient(
+                  colors: [
+                    Color(0xFFB8860B),
+                    Color(0xFF6A3E00),
+                  ],
+                ),
+              ),
+
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment
+                        .start,
+
+                children: [
+
+                  const Text(
+                    "Current Level",
+                    style: TextStyle(
+                      color:
+                          Colors.white70,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(
+                      height: 8),
+
+                  Text(
+                    "Level ${AppData.level}",
+
+                    style:
+                        const TextStyle(
+                      color:
+                          Colors.white,
+                      fontSize: 24,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(
+                      height: 10),
+
+                  LinearProgressIndicator(
+                    value:
+                        (AppData.xp %
+                                100) /
+                            100,
+
+                    backgroundColor:
+                        Colors.white24,
+
+                    color:
+                        Colors.amber,
+                  ),
+
+                  const SizedBox(
+                      height: 8),
+
+                  Text(
+                    "${AppData.xp} XP",
+
+                    style:
+                        const TextStyle(
+                      color:
+                          Colors.white70,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
+            );
+          }
+
+          final achievement =
+              AppData
+                  .achievements[
+                      index -
+                          1];
+
+          return Container(
+            margin:
+                const EdgeInsets.only(
+                    bottom: 14),
+
+            padding:
+                const EdgeInsets.all(
+                    16),
+
+            decoration:
+                BoxDecoration(
+              color:
+                  const Color(
+                      0xFF1A1A1A),
+
+              borderRadius:
+                  BorderRadius.circular(
+                      18),
             ),
 
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-
+            child: Row(
               children: [
 
-                const Text(
-                  "Current Level",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                const Text(
-                  "Level 3 Trader",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                LinearProgressIndicator(
-                  value: 0.6,
+                const CircleAvatar(
+                  radius: 24,
                   backgroundColor:
-                      Colors.white24,
+                      Colors.amber,
 
-                  color: Colors.amber,
+                  child: Icon(
+                    Icons
+                        .emoji_events,
+                    color:
+                        Colors.black,
+                  ),
                 ),
 
-                const SizedBox(height: 8),
+                const SizedBox(
+                    width: 14),
 
-                const Text(
-                  "120 / 200 XP",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    achievement,
+
+                    style:
+                        const TextStyle(
+                      color:
+                          Colors.white,
+                      fontWeight:
+                          FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
+                ),
+
+                const Icon(
+                  Icons.check_circle,
+                  color:
+                      Colors.green,
                 ),
               ],
             ),
-          ),
-
-          const SizedBox(height: 24),
-
-          const Text(
-            "Your Achievements",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          const SizedBox(height: 14),
-
-          buildAchievement(
-            icon: Icons.emoji_events,
-            title: "Bronze Trader",
-            subtitle:
-                "Complete 5 dummy trades",
-            unlocked: true,
-          ),
-
-          buildAchievement(
-            icon: Icons.play_circle_fill,
-            title: "Learning Enthusiast",
-            subtitle:
-                "Watch 5 educational videos",
-            unlocked: true,
-          ),
-
-          buildAchievement(
-            icon: Icons.menu_book,
-            title: "News Reader",
-            subtitle:
-                "Read 10 crypto news",
-            unlocked: true,
-          ),
-
-          buildAchievement(
-            icon: Icons.trending_up,
-            title: "Market Explorer",
-            subtitle:
-                "Open market 20 times",
-            unlocked: false,
-          ),
-
-          buildAchievement(
-            icon: Icons.workspace_premium,
-            title: "Crypto Master",
-            subtitle:
-                "Reach Level 10",
-            unlocked: false,
-          ),
-
-        ],
+          );
+        },
       ),
     );
   }

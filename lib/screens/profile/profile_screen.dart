@@ -28,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 /// PROFILE HEADER
                 Column(
                   children: [
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 55),
                     CircleAvatar(
                       radius: 45,
                       backgroundImage:
@@ -47,6 +47,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const Text(
                       "alyssa@gmail.com",
                       style: TextStyle(color: Colors.grey),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      "Level ${AppData.level} • ${AppData.xp} XP",
+
+                      style: const TextStyle(
+                        color: Colors.orange,
+                        fontWeight:
+                            FontWeight.bold,
+                      ),
                     ),
                     TextButton(
                       onPressed: () {

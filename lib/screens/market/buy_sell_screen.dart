@@ -712,6 +712,9 @@ double get virtualBalance =>
 
                                     /// XP
                                     xp += 15;
+                                    AppData.totalTrades++;
+                                    AppData.addXP(15);
+                                    AppData.checkAchievement();
 
                                     /// DUMMY PROFIT
                                     profitLoss += 12.5;

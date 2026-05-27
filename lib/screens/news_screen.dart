@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'news_story_screen.dart';
+import '../data/app_data.dart';
+
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -18,6 +20,9 @@ class _NewsScreenState extends State<NewsScreen> {
   void initState() {
     super.initState();
     fetchNews();
+    AppData.readNews++;
+    AppData.addXP(10);// Tambahkan XP saat membuka news
+    AppData.checkAchievement(); 
   }
 
   Future<void> fetchNews() async {

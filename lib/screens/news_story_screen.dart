@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'webview_screen.dart';
+import '../data/app_data.dart';
 
 class NewsStoryScreen extends StatelessWidget {
   final Map article;
@@ -448,6 +449,10 @@ Widget buildVideoCard({
 
       final Uri uri =
           Uri.parse(url);
+        
+      AppData.watchedVideos++;
+      AppData.addXP(20);
+      AppData.checkAchievement();
 
       await launchUrl(
         uri,
