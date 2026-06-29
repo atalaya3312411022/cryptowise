@@ -15,7 +15,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
-  bool _showSuccess = false;
+
+  bool _showBanner = false;
+  bool _isSuccess = false;
+  String _bannerMessage = '';
 
   @override
   void dispose() {
@@ -27,14 +30,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _handleRegister() {
-    setState(() => _showSuccess = true);
+    if (_nameController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _passwordController.text.isEmpty ||
+        _confirmController.text.isEmpty) {
+      setState(() {
+        _showBanner = true;
+        _isSuccess = false;
+        _bannerMessage =
+            'All fields are required. Please complete the registration form.';
+      });
 
-    // Auto dismiss & go to login after 2.5s
-    Future.delayed(const Duration(milliseconds: 2500), () {
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          setState(() => _showBanner = false);
+        }
+      });
+
+      return;
+    }
+
+    if (_passwordController.text != _confirmController.text) {
+      setState(() {
+        _showBanner = true;
+        _isSuccess = false;
+        _bannerMessage =
+            'Passwords do not match. Please try again.';
+      });
+
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          setState(() => _showBanner = false);
+        }
+      });
+
+      return;
+    }
+
+    setState(() {
+      _showBanner = true;
+      _isSuccess = true;
+      _bannerMessage =
+          'Account created successfully. You can now sign in to CryptoWise.';
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          MaterialPageRoute(
+            builder: (_) => const LoginScreen(),
+          ),
           (route) => false,
         );
       }
@@ -53,80 +99,104 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 60),
 
                   // Logo
                   Image.asset(
                     'assets/images/logo.png',
-                    width: 120,
+                    width: 160,
                   ),
 
+                  const SizedBox(height: 24),
 
                   // Title
-                  Text('Daftar Akun', style: AppTextStyles.headline2),
-                  const SizedBox(height: 32),
+                  Text(
+                    'Create Account',
+                    style: AppTextStyles.headline2,
+                  ),
 
-                  // Name field
+                  const SizedBox(height: 12),
+
+                  // Subtitle
+                  Text(
+                    'Join CryptoWise and stay updated with the latest cryptocurrency trends, market insights, and portfolio tracking tools.',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.bodyGrey,
+                  ),
+
+                  const SizedBox(height: 40),
+
+                  // Full Name
                   AppTextField(
-                    label: 'Nama',
-                    hint: 'Nama Lengkap',
+                    label: 'Full Name',
+                    hint: 'Enter your full name',
                     controller: _nameController,
                   ),
-                  const SizedBox(height: 16),
 
-                  // Email field
+                  const SizedBox(height: 20),
+
+                  // Email
                   AppTextField(
                     label: 'Email',
-                    hint: 'Email',
+                    hint: 'Enter your email address',
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 16),
 
-                  // Password field
+                  const SizedBox(height: 20),
+
+                  // Password
                   AppTextField(
                     label: 'Password',
-                    hint: 'Password',
+                    hint: 'Create a secure password',
                     controller: _passwordController,
                     obscure: true,
                   ),
-                  const SizedBox(height: 16),
 
-                  // Confirm password
+                  const SizedBox(height: 20),
+
+                  // Confirm Password
                   AppTextField(
-                    label: 'Konfirmasi Password',
-                    hint: 'Konfirmasi Password',
+                    label: 'Confirm Password',
+                    hint: 'Re-enter your password',
                     controller: _confirmController,
                     obscure: true,
                   ),
+
                   const SizedBox(height: 32),
 
-                  // Daftar button
+                  // Create Account Button
                   GoldButton(
-                    text: 'Daftar',
+                    text: 'Create Account',
                     onPressed: _handleRegister,
                   ),
-                  const SizedBox(height: 24),
 
-                  // Already have account
+                  const SizedBox(height: 20),
+
+                  // Sign In Link
                   RichText(
                     text: TextSpan(
                       style: AppTextStyles.bodyGrey,
                       children: [
-                        const TextSpan(text: 'Sudah punya akun? '),
+                        const TextSpan(
+                          text: 'Already have an account? ',
+                        ),
                         WidgetSpan(
                           child: GestureDetector(
                             onTap: () => Navigator.pop(context),
-                            child: Text('Login', style: AppTextStyles.link),
+                            child: Text(
+                              'Sign In',
+                              style: AppTextStyles.link,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 40),
 
-                  // Page dots
+                  // Page Indicator
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -139,20 +209,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _dot(true),
                     ],
                   ),
+
                   const SizedBox(height: 40),
                 ],
               ),
             ),
 
-            // Success banner overlay at top
-            if (_showSuccess)
+            // Banner Notification
+            if (_showBanner)
               Positioned(
                 top: 12,
                 left: 16,
                 right: 16,
-                child: SuccessBanner(
-                  message: 'Akun berhasil dibuat',
-                  onClose: () => setState(() => _showSuccess = false),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _isSuccess
+                        ? const Color(0xFF4CAF50)
+                        : const Color(0xFFFF0000),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        _isSuccess
+                            ? Icons.check_circle
+                            : Icons.error_outline,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          _bannerMessage,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
           ],
@@ -166,7 +265,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       width: active ? 20 : 8,
       height: 8,
       decoration: BoxDecoration(
-        color: active ? AppColors.goldLight : const Color(0xFF555555),
+        color: active
+            ? AppColors.goldLight
+            : const Color(0xFF555555),
         borderRadius: BorderRadius.circular(4),
       ),
     );

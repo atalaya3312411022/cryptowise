@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "644497889566",
+    "firebase_url": "https://cryptowise-72c0a-default-rtdb.firebaseio.com",
     "project_id": "cryptowise-72c0a",
     "storage_bucket": "cryptowise-72c0a.firebasestorage.app"
   },
